@@ -34,12 +34,16 @@ class LoginController {
                 } elseif ($this->view->getName() === "") { //If no username is provided
                     $_SESSION['LogIn'] = false;
                     $msg = "Username is missing";
+                    
                 } elseif ($this->view->getPass() === "") { //If no password is provided
                     $_SESSION['LogIn'] = false;
                     $msg = "Password is missing";
+                    $this->view->populateName();
+                    
                 } else {                                  //In any other case when username or pass are wrong
                     $_SESSION['LogIn'] = false;
                     $msg = "Wrong name or password";
+                    $this->view->populateName();
                 }
             }
         } elseif ($this->view->isLogOutPressed()) { //When logout button is pressed

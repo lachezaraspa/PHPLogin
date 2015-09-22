@@ -10,7 +10,7 @@ class LoginView {
 	private static $cookiePassword = 'LoginView::CookiePassword';
 	private static $keep = 'LoginView::KeepMeLoggedIn';
 	private static $messageId = 'LoginView::Message';
-
+        private $fillName = "";
 	
 
 	/**
@@ -57,7 +57,7 @@ class LoginView {
 					<p id="' . self::$messageId . '">' . $message . '</p>
 					
 					<label for="' . self::$name . '">Username :</label>
-					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="" />
+					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="'.  $this->fillName.'" />
 
 					<label for="' . self::$password . '">Password :</label>
 					<input type="password" id="' . self::$password . '" name="' . self::$password . '" />
@@ -87,6 +87,11 @@ class LoginView {
         return $name;     
         }
         
+        public function populateName(){
+            $this->fillName = $_POST[self::$name];
+        }
+
+
         //Get the posted password
         public function getPass(){
             $pass = null;
