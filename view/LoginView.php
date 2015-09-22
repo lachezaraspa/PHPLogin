@@ -1,5 +1,6 @@
 <?php
 
+
 class LoginView {
 	private static $login = 'LoginView::Login';
 	private static $logout = 'LoginView::Logout';
@@ -14,17 +15,19 @@ class LoginView {
 
 	/**
 	 * Create HTTP response
-	 *
-	 * Should be called after a login attempt has been determined
-	 *
+	 * Should be called after a login attempt has been determine
 	 * @return  void BUT writes to standard output and cookies!
 	 */
-	public function response() {
-		$message = '';
-		
-		$response = $this->generateLoginFormHTML($message);
-		//$response .= $this->generateLogoutButtonHTML($message);
-		return $response;
+	public function response($message) {
+                $response = "";
+                
+                if ($_SESSION['LogIn'] === true){ //Check if the seession is valid and show the corresponding response
+                    $response .= $this->generateLogoutButtonHTML($message);
+                }  else {
+                    $response = $this->generateLoginFormHTML($message);
+                }
+                
+        return $response;
 	}
 
 	/**
@@ -68,9 +71,39 @@ class LoginView {
 		';
 	}
 	
-	//CREATE GET-FUNCTIONS TO FETCH REQUEST VARIABLES
-	private function getRequestUserName() {
-		//RETURN REQUEST VARIABLE: USERNAME
-	}
-	
+//	//CREATE GET-FUNCTIONS TO FETCH REQUEST VARIABLES
+//	private function getRequestUserName() {
+//            
+//            var_dump($_GET);
+//		//RETURN REQUEST VARIABLE: USERNAME
+//	}
+        
+        //Get the posted username
+        public function getName(){
+            $name = null;
+            if(isset($_POST[self::$name])){
+                 $name = $_POST[self::$name];
+            }
+        return $name;     
+        }
+        
+        //Get the posted password
+        public function getPass(){
+            $pass = null;
+            if(isset($_POST[self::$password])){
+                 $pass = $_POST[self::$password];
+            }
+        return $pass;     
+        }
+
+        //Check if the login button is pressed
+        public function isLoginPressed(){ 
+            return isset($_POST[self::$login]);
+        }
+        
+        //Check if the logout button is pressed
+        public function isLogOutPressed(){
+            return isset($_POST[self::$logout]);
+        }
+
 }

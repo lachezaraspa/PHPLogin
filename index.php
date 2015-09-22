@@ -4,6 +4,8 @@
 require_once('view/LoginView.php');
 require_once('view/DateTimeView.php');
 require_once('view/LayoutView.php');
+require_once('model/User.php');
+require_once('controller/LoginController.php');
 
 //MAKE SURE ERRORS ARE SHOWN... MIGHT WANT TO TURN THIS OFF ON A PUBLIC SERVER
 error_reporting(E_ALL);
@@ -14,6 +16,18 @@ $v = new LoginView();
 $dtv = new DateTimeView();
 $lv = new LayoutView();
 
+session_set_cookie_params(0);
+session_name();
+session_start();
 
-$lv->render(false, $v, $dtv);
+if(!isset($_SESSION['LogIn'])){ //If the session is not set, set it to false
+    $_SESSION['LogIn'] = false;
+}
+
+$user1 = (new User("Admin", "Password")); //Create new user
+
+
+$controller = (new LoginController($v, $user1, $lv, $dtv)); //Set up the controller
+$controller->doLogin(); //Use the contoller to log in
+
 

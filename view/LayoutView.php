@@ -1,9 +1,8 @@
 <?php
 
-
 class LayoutView {
   
-  public function render($isLoggedIn, LoginView $v, DateTimeView $dtv) {
+  public function render($isLoggedIn, LoginView $v, DateTimeView $dtv, $msg) {
     echo '<!DOCTYPE html>
       <html>
         <head>
@@ -11,13 +10,12 @@ class LayoutView {
           <title>Login Example</title>
         </head>
         <body>
-          <h1>Assignment 2</h1>
+          <h1>Assignment 2</h1> 
           ' . $this->renderIsLoggedIn($isLoggedIn) . '
-          
           <div class="container">
-              ' . $v->response() . '
-              
-              ' . $dtv->show() . '
+              ' . $v->response($msg) . '    
+              ' . $dtv->show() . '   
+                  
           </div>
          </body>
       </html>
