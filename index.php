@@ -34,6 +34,10 @@ if(!isset($_SESSION['LogIn'])){ //If the session is not set, set it to false
     $_SESSION['LogIn'] = false;
 }
 
+if(!isset($_SESSION['newUser'])){ //If the session is not set, set it to false
+    $_SESSION['newUser'] = false;
+}
+
 $regmodel = new RegisterModel();
 $logmodel = new LoginModel();
 
