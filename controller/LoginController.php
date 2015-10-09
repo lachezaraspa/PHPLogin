@@ -24,6 +24,8 @@ class LoginController {
 
     public function control() {
         
+        $this->view->setMessage();
+        $_SESSION['newUser'] = false;
         
         if ($this->model->isLoged()) {
             if ($this->view->isLogOutPressed()) {
