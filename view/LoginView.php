@@ -38,6 +38,8 @@ class LoginView {
 
         if ($this->loginSuccess === true && $this->isLoginPressed()) {
             $this->message = "Welcome";
+        } elseif($_SESSION['newUser']){
+            $this->message = "Registered new user.";
         } elseif ($this->isLoginPressed() && $this->getName() === "") {
             $this->message = "Username is missing";
         } elseif ($this->isLoginPressed() && $this->getPass() === "") {
