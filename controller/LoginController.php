@@ -1,65 +1,54 @@
 <?php
-
 /**
  * @author Lachezar
  */
 class LoginController {
 
-    private $user;
+    private $model;
     private $view;
-    private $lv;
-    private $dtv;
+    private $conn;
+    private $dal;
 
-    function __construct(LoginView $view, User $user, LayoutView $lv, DateTimeView $dtv) {
+    function __construct(LoginView $view, LoginModel $model) {
         $this->view = $view;
-        $this->user = $user;
-        $this->lv = $lv;
-        $this->dtv = $dtv;
+        $this->model = $model;
+        //$this->conn = new mysqli("mysql3.000webhost.com", "a3768997_root", "123qwe", "a3768997_users");
+           $this->conn = new mysqli("localhost", "root", "root","userdb");
+
+        // Check connection
+        if ($this->conn->connect_error) {
+            throw new Exception($this->conn->connect_error);
+        }
+        $this->dal = new UserDAL($this->conn);
     }
 
-    public function doLogin() {
-        $msg = null;
+    public function control() {
+        
+        
+        if ($this->model->isLoged()) {
+            if ($this->view->isLogOutPressed()) {
+                $this->model->doLogout();
+                $this->view->setLogout();
+                $this->view->setMessage();
+            }
+        } else {
+            if ($this->view->isLoginPressed()) {
 
-        //Checks when the login button is pressed
-        if ($this->view->isLoginPressed()) {
-           
-        //If the POST is resent set the message to null
-            if ($_SESSION['LogIn'] != true) {
-                
-                //If the credentials provided are correct 
-                if ($this->user->getName() === $this->view->getName() && $this->view->getPass() === $this->user->getPass()) {
-                        $msg = "Welcome";
-                        $_SESSION['LogIn'] = true;
+                $name = $this->view->getName();
+                $pass = $this->view->getPass();
 
-                } elseif ($this->view->getName() === "") { //If no username is provided
-                    $_SESSION['LogIn'] = false;
-                    $msg = "Username is missing";
+                if ($this->model->doLogin($name, $pass, $this->dal)) {
+                    $this->view->setLoginSuccess();
+                    $this->view->setMessage();
                     
-                } elseif ($this->view->getPass() === "") { //If no password is provided
-                    $_SESSION['LogIn'] = false;
-                    $msg = "Password is missing";
-                    $this->view->populateName();
-                    
-                } else {                                  //In any other case when username or pass are wrong
-                    $_SESSION['LogIn'] = false;
-                    $msg = "Wrong name or password";
-                    $this->view->populateName();
+                } else {
+                    $this->view->setLoginFail();
+                    $this->view->setMessage();
+                    $this->view->populateName($name);
                 }
             }
-        } elseif ($this->view->isLogOutPressed()) { //When logout button is pressed
-            $msg = null;
-            
-            if ($_SESSION['LogIn'] != false) { //Checks for resubition of logout post
-                $msg = "Bye bye!";
-                $_SESSION['LogIn'] = false; 
-                session_destroy();
-            }
-        
-            
         }
-        $this->lv->render($_SESSION['LogIn'], $this->view, $this->dtv, $msg);
+        $this->conn->close();  
     }
-    
-     
-    
+
 }
