@@ -39,6 +39,7 @@ class RegisterContoller {
                 $this->view->registrationFail();
                 $this->view->generateMessage($this->lv);
             } else {
+                $_SESSION['newUser'] = true;
                 $this->view->registrationSuccess();
                 $this->lgv->populateName($this->view->getName());
                 $this->lv->renderForm($this->view, $this->lgv, false, $this->model->isRegistered());
